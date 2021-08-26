@@ -17,7 +17,8 @@ public class CustomerDAOImpl {
         pstm.setObject(2, customer.getName ());
         pstm.setObject(3, customer.getAddress ());
         pstm.setObject(4, 0);
-        return true;
+
+        return (pstm.executeUpdate ()>0);
     }
 
     public boolean updateCustomer(Customer customer) throws Exception {
@@ -27,21 +28,22 @@ public class CustomerDAOImpl {
         pstm.setObject(1, customer.getcID ());
         pstm.setObject(2, customer.getName ());
         pstm.setObject(3, customer.getAddress ());
-        return true;
+        return (pstm.executeUpdate ()>0);
     }
 
     public boolean deleteCustomer(String id) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
         pstm.setObject(1, id);
-        return true;
+        return (pstm.executeUpdate ()>0);
     }
 
     public Customer searchCustomer(String id) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery( "SELECT * FROM Customer where id=?");
-        return null;
+
+        return (Customer) rst;
     }
 
     public ArrayList<Customer> getAllCustomer() throws Exception {

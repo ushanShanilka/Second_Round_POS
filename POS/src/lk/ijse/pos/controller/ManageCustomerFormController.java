@@ -124,9 +124,7 @@ public class ManageCustomerFormController implements Initializable {
             } catch (Exception ex) {
                 Logger.getLogger(ManageCustomerFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
-
     }
 
     private void clearTextFields() {
@@ -181,4 +179,13 @@ public class ManageCustomerFormController implements Initializable {
 
     }
 
+    public void searchCustomer ( ActionEvent actionEvent ) throws Exception {
+        CustomerDAOImpl customerDAO = new CustomerDAOImpl ( );
+        Customer customer = customerDAO.searchCustomer ( txtCustomerId.getText ( ) );
+        if ( customer.getcID ()!=null ){
+            txtCustomerAddress.setText ( customer.getAddress () );
+            txtCustomerName.setText ( customer.getName () );
+        }
+
+    }
 }
