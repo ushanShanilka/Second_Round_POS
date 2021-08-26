@@ -5,12 +5,6 @@
  */
 package lk.ijse.pos.model;
 
-
-/**
- * @author : Sanu Vithanage
- * @since : 0.1.0
- **/
-
 public class Customer {
     private String  cID;
     private String name;

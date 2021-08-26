@@ -14,10 +14,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author : Sanu Vithanage
- * @since : 0.1.0
- **/
 public class AppInitializer extends Application {
     @Override
     public void start(Stage primaryStage) {

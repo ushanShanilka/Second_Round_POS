@@ -21,11 +21,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * @author : Sanu Vithanage
- * @since : 0.1.0
- **/
-
 public class MainFormController implements Initializable {
 
     @FXML

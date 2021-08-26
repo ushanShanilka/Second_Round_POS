@@ -7,12 +7,6 @@ package lk.ijse.pos.model;
 
 import java.math.BigDecimal;
 
-
-/**
- * @author : Sanu Vithanage
- * @since : 0.1.0
- **/
-
 public class Item {
     private String code;
     private String description;
