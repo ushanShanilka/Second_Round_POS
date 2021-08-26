@@ -5,6 +5,8 @@
  */
 package lk.ijse.pos.model;
 
+import javafx.collections.ObservableList;
+
 import java.math.BigDecimal;
 
 public class Item {

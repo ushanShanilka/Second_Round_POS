@@ -16,8 +16,8 @@ public class ItemDAOImpl {
 
         pstm.setObject(1, item.getCode ());
         pstm.setObject(2, item.getDescription ());
-        pstm.setObject(3, new BigDecimal ( item.getQtyOnHand ()));
-        pstm.setObject(4, Integer.parseInt(item.getUnitPrice ()));
+        pstm.setObject(3, item.getQtyOnHand ());
+        pstm.setObject(4, item.getUnitPrice ());
         return (pstm.executeUpdate ()>0);
     }
 
@@ -28,8 +28,8 @@ public class ItemDAOImpl {
 
         pstm.setObject(1, item.getCode ());
         pstm.setObject(2, item.getDescription ());
-        pstm.setObject(3, new BigDecimal ( item.getQtyOnHand ()));
-        pstm.setObject(4, Integer.parseInt(item.getUnitPrice ()));
+        pstm.setObject(3, item.getUnitPrice ());
+        pstm.setObject(4, item.getQtyOnHand ());
         return (pstm.executeUpdate ()>0);
     }
 
@@ -53,7 +53,7 @@ public class ItemDAOImpl {
 
         while (rst.next()){
 
-            ItemTM item = new ItemTM(rst.getString(1),
+            Item item = new Item(rst.getString(1),
                                      rst.getString(2),
                                      rst.getBigDecimal(3),
                                      rst.getInt(4));
