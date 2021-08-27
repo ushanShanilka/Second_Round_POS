@@ -29,6 +29,7 @@ import lk.ijse.pos.view.tblmodel.OrderDetailTM;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
@@ -117,17 +118,21 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-                    PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
-                    pstm.setObject(1, customerID);
-                    ResultSet rst = pstm.executeQuery();
+//                    PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
+//                    pstm.setObject(1, customerID);
+//                    ResultSet rst = pstm.executeQuery();
 
-                    if (rst.next()) {
-                        String customerName = rst.getString(2);
-                        txtCustomerName.setText(customerName);
+                    CustomerDAOImpl customerDAO = new CustomerDAOImpl ( );
+                    Customer customer = customerDAO.searchCustomer ( customerID );
+
+                    if (customer!=null) {
+                        txtCustomerName.setText(customer.getName ());
                     }
 
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception e) {
+                    e.printStackTrace ( );
                 }
 
             }
@@ -148,15 +153,18 @@ public class OrderFormController implements Initializable {
                 }
 
                 try {
-                    PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code = ?");
-                    pstm.setObject(1, itemCode);
+//                    PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code = ?");
+//                    pstm.setObject(1, itemCode);
+//
+//                    ResultSet rst = pstm.executeQuery();
 
-                    ResultSet rst = pstm.executeQuery();
+                    ItemDAOImpl itemDAO = new ItemDAOImpl ( );
+                    Item item = itemDAO.searchItem ( itemCode );
 
-                    if (rst.next()) {
-                        String description = rst.getString(2);
-                        double unitPrice = rst.getDouble(3);
-                        int qtyOnHand = rst.getInt(4);
+                    if (item!=null) {
+                        String description = item.getDescription ();
+                        BigDecimal unitPrice = item.getUnitPrice ();
+                        int qtyOnHand = item.getQtyOnHand ();
 
                         txtDescription.setText(description);
                         txtUnitPrice.setText(unitPrice + "");
@@ -164,6 +172,8 @@ public class OrderFormController implements Initializable {
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception e) {
+                    e.printStackTrace ( );
                 }
 
             }
@@ -329,18 +339,24 @@ public class OrderFormController implements Initializable {
                 }
                 int qtyOnHand = 0;
 
-                Statement stm = connection.createStatement();
-                ResultSet rst = stm.executeQuery("SELECT * FROM Item WHERE code='" + orderDetail.getItemCode() + "'");
-                if (rst.next()) {
-                    qtyOnHand = rst.getInt(4);
+//                Statement stm = connection.createStatement();
+//                ResultSet rst = stm.executeQuery("SELECT * FROM Item WHERE code='" + orderDetail.getItemCode() + "'");
+
+                ItemDAOImpl itemDAO = new ItemDAOImpl ( );
+                Item item = itemDAO.searchItem ( orderDetail.getItemCode ( ) );
+
+                if (item!=null) {
+                    qtyOnHand = item.getQtyOnHand ();
                 }
-                PreparedStatement pstm2 = connection.prepareStatement("UPDATE Item SET qtyOnHand=? WHERE code=?");
-                pstm2.setObject(1, qtyOnHand - orderDetail.getQty());
-                pstm2.setObject(2, orderDetail.getItemCode());
+//                PreparedStatement pstm2 = connection.prepareStatement("UPDATE Item SET qtyOnHand=? WHERE code=?");
+//                pstm2.setObject(1, qtyOnHand - orderDetail.getQty());
+//                pstm2.setObject(2, orderDetail.getItemCode());
 
-                affectedRows = pstm2.executeUpdate();
+                ItemDAOImpl itemDAO1 = new ItemDAOImpl ( );
+                boolean b = itemDAO1.updateItemQtyOnHand ( orderDetail.getItemCode ( ) , orderDetail.getQty ( ) );
 
-                if (affectedRows == 0) {
+
+                if (b) {
                     connection.rollback();
                     return;
                 }
@@ -358,6 +374,8 @@ public class OrderFormController implements Initializable {
                 Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace ( );
         } finally {
             try {
                 connection.setAutoCommit(true);
