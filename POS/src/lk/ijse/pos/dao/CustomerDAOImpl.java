@@ -40,8 +40,10 @@ public class CustomerDAOImpl {
 
     public Customer searchCustomer(String id) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Customer where id=?");
+        PreparedStatement stm = connection.prepareStatement ( "SELECT * FROM Customer where id=?" );
+        stm.setObject ( 1,id );
+        ResultSet rst = stm.executeQuery ( );
+
         if (rst.next()) {
             return new Customer(rst.getString("id"), rst.getString("name"), rst.getString("address"));
         }
