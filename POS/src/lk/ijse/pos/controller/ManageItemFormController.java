@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
+import lk.ijse.pos.dao.ItemDAO;
 import lk.ijse.pos.dao.ItemDAOImpl;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Customer;
@@ -53,10 +54,11 @@ public class ManageItemFormController implements Initializable{
 
     private boolean addNew = true;
 
+    ItemDAO itemDAO = new ItemDAOImpl ( );
+
     private void loadAllItems(){
 
         try {
-            ItemDAOImpl itemDAO = new ItemDAOImpl ( );
             ArrayList<Item> all = itemDAO.getAll ( );
             ArrayList<ItemTM> items = new ArrayList<> ( );
 
@@ -123,11 +125,9 @@ public class ManageItemFormController implements Initializable{
 
     @FXML
     private void btnAddNewItem_OnAction(ActionEvent event) {
-
         tblItems.getSelectionModel().clearSelection();
         txtItemCode.requestFocus();
         addNew = true;
-
     }
 
     @FXML
@@ -136,7 +136,6 @@ public class ManageItemFormController implements Initializable{
         if (addNew){
 
             try {
-                ItemDAOImpl itemDAO = new ItemDAOImpl ( );
                 boolean b = itemDAO.saveItem ( new Item ( txtItemCode.getText ( ) , txtDescription.getText ( ) , new BigDecimal ( txtUnitPrice.getText ( ) ) , Integer.parseInt ( txtQty.getText ( ) )));
 
                 if (b){
@@ -152,7 +151,6 @@ public class ManageItemFormController implements Initializable{
         }else{
 
             try {
-                ItemDAOImpl itemDAO = new ItemDAOImpl ( );
                 boolean b = itemDAO.updateItem ( new Item ( txtItemCode.getText ( ) , txtDescription.getText ( ) , new BigDecimal ( txtUnitPrice.getText ( ) ) , Integer.parseInt ( txtQty.getText ( ) ) ) );
 
 
@@ -179,7 +177,6 @@ public class ManageItemFormController implements Initializable{
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
 
         try {
-            ItemDAOImpl itemDAO = new ItemDAOImpl ( );
             boolean b = itemDAO.deleteItem ( txtItemCode.getText ( ) );
 
             if (b){

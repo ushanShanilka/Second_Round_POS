@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ItemDAOImpl {
+public class ItemDAOImpl implements ItemDAO{
     public boolean saveItem( Item item ) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
 
