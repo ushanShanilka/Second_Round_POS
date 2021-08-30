@@ -21,6 +21,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lk.ijse.pos.dao.*;
+import lk.ijse.pos.dao.impl.CustomerDAOImpl;
+import lk.ijse.pos.dao.impl.ItemDAOImpl;
+import lk.ijse.pos.dao.impl.OrderDAOImpl;
+import lk.ijse.pos.dao.impl.OrderDetailsDAOImpl;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.model.Item;
@@ -78,13 +82,14 @@ public class OrderFormController implements Initializable {
 
     private Connection connection;
 
-    CustomerDAO customerDAO = new CustomerDAOImpl ( );
+    /*Property  Injection*/
+    private CustomerDAO customerDAO = new CustomerDAOImpl ( );
 
-    ItemDAO itemDAO = new ItemDAOImpl ( );
+    private ItemDAO itemDAO = new ItemDAOImpl ( );
 
-    OrderDAO orderDAO = new OrderDAOImpl ( );
+    private OrderDAO orderDAO = new OrderDAOImpl ( );
 
-    OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl ( );
+    private OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl ( );
 
 
     @Override

@@ -17,7 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
 import lk.ijse.pos.dao.CustomerDAO;
-import lk.ijse.pos.dao.CustomerDAOImpl;
+import lk.ijse.pos.dao.impl.CustomerDAOImpl;
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.view.tblmodel.CustomerTM;
 
@@ -45,12 +45,11 @@ public class ManageCustomerFormController implements Initializable {
     private TableView<CustomerTM> tblCustomers;
 
     /*Property  Injection*/
-    CustomerDAO customerDAO = new CustomerDAOImpl ( );
+    private CustomerDAO customerDAO = new CustomerDAOImpl ( );
 
     private void loadAllCustomers() {
 
         try {
-
             ArrayList<Customer> allCustomer = customerDAO.getAllCustomer ( );
             ArrayList<CustomerTM> all = new ArrayList<> (  );
 
@@ -72,11 +71,11 @@ public class ManageCustomerFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         tblCustomers.getColumns().get(0).setStyle("-fx-alignment:center");
         tblCustomers.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
         tblCustomers.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
         tblCustomers.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("address"));
-
         tblCustomers.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CustomerTM>() {
             @Override
             public void changed(ObservableValue<? extends CustomerTM> observable, CustomerTM oldValue, CustomerTM newValue) {
@@ -112,12 +111,9 @@ public class ManageCustomerFormController implements Initializable {
         Optional<ButtonType> result = confirmAlert.showAndWait();
 
         if (result.get() == ButtonType.YES) {
-
-            String customerID = tblCustomers.getSelectionModel().getSelectedItem().getId();
-
+                tblCustomers.getSelectionModel().getSelectedItem().getId();
             try {
                 boolean b = customerDAO.deleteCustomer ( txtCustomerId.getText ( ) );
-
                 if (b) {
                     loadAllCustomers();
                 } else {
@@ -148,10 +144,8 @@ public class ManageCustomerFormController implements Initializable {
     private void btnSave_OnAction(ActionEvent event) {
 
         if (addnew) {
-
             try {
                 boolean b = customerDAO.addCustomer ( new Customer ( txtCustomerId.getText ( ) , txtCustomerName.getText ( ) , txtCustomerAddress.getText ( ) ) );
-
                 if (b) {
                     loadAllCustomers();
                 } else {
@@ -160,24 +154,19 @@ public class ManageCustomerFormController implements Initializable {
             } catch (Exception ex) {
                 Logger.getLogger(ManageCustomerFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         } else {
             try {
                 //Update
                 boolean b = customerDAO.updateCustomer ( new Customer ( txtCustomerId.getText ( ) , txtCustomerName.getText ( ) , txtCustomerAddress.getText ( ) ) );
-
                 if (b) {
                     loadAllCustomers();
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Unable to update the customer", ButtonType.OK).show();
                 }
-
-
             } catch (Exception ex) {
                 Logger.getLogger(ManageCustomerFormController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
 
     public void searchCustomer ( ActionEvent actionEvent ) throws Exception {
@@ -186,6 +175,5 @@ public class ManageCustomerFormController implements Initializable {
             txtCustomerAddress.setText ( customer.getAddress () );
             txtCustomerName.setText ( customer.getName () );
         }
-
     }
 }

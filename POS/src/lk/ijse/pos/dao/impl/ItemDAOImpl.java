@@ -1,5 +1,6 @@
-package lk.ijse.pos.dao;
+package lk.ijse.pos.dao.impl;
 
+import lk.ijse.pos.dao.ItemDAO;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Item;
 import lk.ijse.pos.view.tblmodel.ItemTM;
@@ -8,7 +9,8 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ItemDAOImpl implements ItemDAO{
+public class ItemDAOImpl implements ItemDAO {
+    @Override
     public boolean saveItem( Item item ) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
 
@@ -21,6 +23,7 @@ public class ItemDAOImpl implements ItemDAO{
         return (pstm.executeUpdate ()>0);
     }
 
+    @Override
     public boolean updateItem( Item item ) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
 
@@ -33,6 +36,7 @@ public class ItemDAOImpl implements ItemDAO{
         return (pstm.executeUpdate ()>0);
     }
 
+    @Override
     public boolean deleteItem( String code ) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
 
@@ -42,6 +46,7 @@ public class ItemDAOImpl implements ItemDAO{
         return (pstm.executeUpdate ()>0);
     }
 
+    @Override
     public ArrayList<Item> getAll() throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
 
@@ -64,6 +69,7 @@ public class ItemDAOImpl implements ItemDAO{
         return alItems;
     }
 
+    @Override
     public Item searchItem(String code) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM Item where code=?");
@@ -78,6 +84,7 @@ public class ItemDAOImpl implements ItemDAO{
         return null;
     }
 
+    @Override
     public boolean updateItemQtyOnHand( String code,int qtyOnHand ) throws Exception {
         Connection connection = DBConnection.getInstance().getConnection();
 

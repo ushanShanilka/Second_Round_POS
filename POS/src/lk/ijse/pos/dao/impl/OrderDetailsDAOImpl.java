@@ -1,5 +1,6 @@
-package lk.ijse.pos.dao;
+package lk.ijse.pos.dao.impl;
 
+import lk.ijse.pos.dao.OrderDetailsDAO;
 import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.OrderDetails;
 import lk.ijse.pos.view.tblmodel.OrderDetailTM;
@@ -7,7 +8,7 @@ import lk.ijse.pos.view.tblmodel.OrderDetailTM;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class OrderDetailsDAOImpl implements OrderDetailsDAO{
+public class OrderDetailsDAOImpl implements OrderDetailsDAO {
     public boolean addOrderDetails( OrderDetails orderDetails ) throws Exception {
         Connection connection = DBConnection.getInstance ( ).getConnection ( );
         PreparedStatement preparedStatement = connection.prepareStatement ( "INSERT INTO OrderDetail VALUES (?,?,?,?)" );
