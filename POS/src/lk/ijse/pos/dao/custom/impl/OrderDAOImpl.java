@@ -1,6 +1,6 @@
-package lk.ijse.pos.dao.impl;
+package lk.ijse.pos.dao.custom.impl;
 
-import lk.ijse.pos.dao.OrderDAO;
+import lk.ijse.pos.dao.custom.OrderDAO;
 import lk.ijse.pos.model.Orders;
 import lk.ijse.pos.utils.CrudUtils;
 
@@ -9,27 +9,28 @@ import java.util.ArrayList;
 public class OrderDAOImpl implements OrderDAO {
 
     @Override
-    public boolean addOrder(Orders orders) throws Exception {
+    public boolean add(Orders orders) throws Exception {
         return CrudUtils.execute ( "INSERT INTO Orders VALUES (?,?,?)",orders.getId (),orders.getDate (),orders.getCustomerId ());
     }
 
     @Override
-    public boolean deleteOrder(){
+    public boolean update ( Orders orders ) throws Exception {
         throw new UnsupportedOperationException ( "Error!" );
     }
 
     @Override
-    public boolean updateOrder(){
+    public boolean delete ( String s ) throws Exception {
         throw new UnsupportedOperationException ( "Error!" );
     }
 
     @Override
-    public Orders searchOrder(){
+    public Orders search ( String s ) throws Exception {
         throw new UnsupportedOperationException ( "Error!" );
     }
 
+
     @Override
-    public ArrayList<Orders> getAllOrders(){
-        return getAllOrders ();
+    public ArrayList<Orders> getAll(){
+        return getAll ();
     }
 }

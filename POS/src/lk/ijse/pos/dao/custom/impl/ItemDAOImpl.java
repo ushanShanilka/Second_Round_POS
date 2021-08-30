@@ -1,6 +1,6 @@
-package lk.ijse.pos.dao.impl;
+package lk.ijse.pos.dao.custom.impl;
 
-import lk.ijse.pos.dao.ItemDAO;
+import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.model.Item;
 import lk.ijse.pos.utils.CrudUtils;
 
@@ -9,20 +9,19 @@ import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
     @Override
-    public boolean saveItem( Item item ) throws Exception {
+    public boolean add( Item item ) throws Exception {
         return CrudUtils.execute ( "INSERT INTO Item VALUES (?,?,?,?)",item.getCode (),item.getDescription (),item.getUnitPrice (),item.getUnitPrice ());
     }
 
     @Override
-    public boolean updateItem( Item item ) throws Exception {
+    public boolean update( Item item ) throws Exception {
         return CrudUtils.execute ("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",item.getDescription (),item.getUnitPrice (),item.getQtyOnHand (),item.getCode ());
     }
 
     @Override
-    public boolean deleteItem( String code ) throws Exception {
+    public boolean delete( String code ) throws Exception {
         return CrudUtils.execute ("DELETE FROM Item WHERE code=?",code);
     }
-
     @Override
     public ArrayList<Item> getAll() throws Exception {
         ResultSet resultSet = CrudUtils.execute ( "SELECT * FROM Item" );
@@ -43,7 +42,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public Item searchItem(String code) throws Exception {
+    public Item search(String code) throws Exception {
         ResultSet resultSet = CrudUtils.execute ( "SELECT * FROM Item where code=?",code );
 
         if (resultSet.next()) {

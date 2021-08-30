@@ -1,16 +1,16 @@
-package lk.ijse.pos.dao.impl;
+package lk.ijse.pos.dao.custom.impl;
 
-import lk.ijse.pos.dao.CustomerDAO;
+import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.utils.CrudUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerDAOImpl implements CustomerDAO {
+public class CustomerDAOImpl implements CustomerDAO{
 
     @Override
-    public boolean addCustomer(Customer customer) throws Exception {
+    public boolean add(Customer customer) throws Exception {
         return CrudUtils.execute ( "INSERT INTO Customer VALUES (?,?,?,?)",
                                               customer.getcID (),
                                               customer.getName (),
@@ -18,7 +18,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean updateCustomer(Customer customer) throws Exception {
+    public boolean update(Customer customer) throws Exception {
         return CrudUtils.execute ( "UPDATE Customer SET name=?, address=? WHERE id=?",
                                          customer.getName (),
                                          customer.getAddress (),
@@ -26,12 +26,12 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public boolean deleteCustomer(String id) throws Exception {
+    public boolean delete(String id) throws Exception {
         return CrudUtils.execute ( "DELETE FROM Customer WHERE id=?",id );
     }
 
     @Override
-    public Customer searchCustomer(String id) throws Exception {
+    public Customer search(String id) throws Exception {
         ResultSet resultSet = CrudUtils.execute ( "SELECT * FROM Customer where id=?",id );
 
         if (resultSet.next()) {
@@ -41,7 +41,7 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public ArrayList<Customer> getAllCustomer() throws Exception {
+    public ArrayList<Customer> getAll() throws Exception {
         ResultSet resultSet = CrudUtils.execute ( "SELECT * FROM Customer" );
 
         ArrayList<Customer> alCustomers = new ArrayList<>();
