@@ -1,10 +1,8 @@
 package lk.ijse.pos.dao.impl;
 
 import lk.ijse.pos.dao.CustomerDAO;
-import lk.ijse.pos.db.DBConnection;
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.utils.CrudUtils;
-import lk.ijse.pos.view.tblmodel.CustomerTM;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,28 +11,28 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean addCustomer(Customer customer) throws Exception {
-        return CrudUtils.executeUpdate ( "INSERT INTO Customer VALUES (?,?,?)",
+        return CrudUtils.execute ( "INSERT INTO Customer VALUES (?,?,?,?)",
                                               customer.getcID (),
                                               customer.getName (),
-                                              customer.getAddress ());
+                                              customer.getAddress (),0);
     }
 
     @Override
     public boolean updateCustomer(Customer customer) throws Exception {
-        return CrudUtils.executeUpdate ( "UPDATE Customer SET name=?, address=? WHERE id=?",
-                                         customer.getcID (),
+        return CrudUtils.execute ( "UPDATE Customer SET name=?, address=? WHERE id=?",
                                          customer.getName (),
-                                         customer.getAddress ());
+                                         customer.getAddress (),
+        customer.getcID ());
     }
 
     @Override
     public boolean deleteCustomer(String id) throws Exception {
-        return CrudUtils.executeUpdate ( "DELETE FROM Customer WHERE id=?",id );
+        return CrudUtils.execute ( "DELETE FROM Customer WHERE id=?",id );
     }
 
     @Override
     public Customer searchCustomer(String id) throws Exception {
-        ResultSet resultSet = CrudUtils.executeQuery ( "SELECT * FROM Customer where id=?" );
+        ResultSet resultSet = CrudUtils.execute ( "SELECT * FROM Customer where id=?",id );
 
         if (resultSet.next()) {
             return new Customer(resultSet.getString("id"), resultSet.getString("name"), resultSet.getString("address"));
@@ -44,7 +42,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public ArrayList<Customer> getAllCustomer() throws Exception {
-        ResultSet resultSet = CrudUtils.executeQuery ( "SELECT * FROM Customer" );
+        ResultSet resultSet = CrudUtils.execute ( "SELECT * FROM Customer" );
 
         ArrayList<Customer> alCustomers = new ArrayList<>();
 
