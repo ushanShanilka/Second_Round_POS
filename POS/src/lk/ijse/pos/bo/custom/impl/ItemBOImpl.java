@@ -1,6 +1,8 @@
 package lk.ijse.pos.bo.custom.impl;
 
+import lk.ijse.pos.bo.custom.BOFactory;
 import lk.ijse.pos.bo.custom.ItemBO;
+import lk.ijse.pos.bo.custom.SuperBO;
 import lk.ijse.pos.dao.DAOFactory;
 import lk.ijse.pos.dao.SuperDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
@@ -16,7 +18,6 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public boolean addItem ( Item item ) throws Exception {
-
         return itemDAO.add ( item );
     }
 

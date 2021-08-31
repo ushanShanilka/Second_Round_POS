@@ -16,6 +16,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
+import lk.ijse.pos.bo.custom.BOFactory;
+import lk.ijse.pos.bo.custom.SuperBO;
 import lk.ijse.pos.bo.custom.impl.CustomerBOImpl;
 import lk.ijse.pos.bo.custom.CustomerBO;
 import lk.ijse.pos.dao.DAOFactory;
@@ -46,7 +48,7 @@ public class ManageCustomerFormController implements Initializable {
     @FXML
     private TableView<CustomerTM> tblCustomers;
 
-    CustomerBO customerBO = new CustomerBOImpl ();
+    CustomerBO customerBO = (CustomerBO) BOFactory.getInstance ( ).getBO ( BOFactory.BOType.CUSTOMER );
 
     private void loadAllCustomers() {
 

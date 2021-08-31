@@ -20,12 +20,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import lk.ijse.pos.bo.custom.*;
 import lk.ijse.pos.bo.custom.impl.CustomerBOImpl;
 import lk.ijse.pos.bo.custom.impl.ItemBOImpl;
 import lk.ijse.pos.bo.custom.impl.PlaceOrderBOImpl;
-import lk.ijse.pos.bo.custom.CustomerBO;
-import lk.ijse.pos.bo.custom.ItemBO;
-import lk.ijse.pos.bo.custom.PlaceOrderBO;
 
 import lk.ijse.pos.model.Customer;
 import lk.ijse.pos.model.Item;
@@ -81,16 +79,15 @@ public class OrderFormController implements Initializable {
     @FXML
     private JFXDatePicker txtOrderDate;
 
-    PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl ( );
+    PlaceOrderBO placeOrderBO = (PlaceOrderBO) BOFactory.getInstance ( ).getBO ( BOFactory.BOType.ORDER );
 
-    CustomerBO customerBO = new CustomerBOImpl ();
+    CustomerBO customerBO = (CustomerBO) BOFactory.getInstance ( ).getBO ( BOFactory.BOType.CUSTOMER );
 
-    ItemBO itemBO = new ItemBOImpl ();
+    ItemBO itemBO = (ItemBO) BOFactory.getInstance ( ).getBO ( BOFactory.BOType.ITEM );
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         try {
 
 

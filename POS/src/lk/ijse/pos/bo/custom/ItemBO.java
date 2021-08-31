@@ -4,7 +4,7 @@ import lk.ijse.pos.model.Item;
 
 import java.util.ArrayList;
 
-public interface ItemBO {
+public interface ItemBO extends SuperBO{
     public boolean addItem( Item item ) throws Exception ;
     public boolean deleteItem(String code) throws Exception ;
     public Item searchItem(String code) throws Exception ;
