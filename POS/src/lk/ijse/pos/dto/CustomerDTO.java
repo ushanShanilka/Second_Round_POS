@@ -1,21 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package lk.ijse.pos.model;
+package lk.ijse.pos.dto;
 
-import javafx.collections.ObservableList;
-
-public class Customer {
+public class CustomerDTO {
     private String  cID;
     private String name;
     private String address;
 
-    public Customer ( ) {
+    public CustomerDTO ( ) {
     }
 
-    public Customer ( String cID , String name , String address ) {
+    public CustomerDTO ( String cID , String name , String address ) {
         this.cID = cID;
         this.name = name;
         this.address = address;
@@ -47,7 +40,7 @@ public class Customer {
 
     @Override
     public String toString ( ) {
-        return "Customer{" +
+        return "CustomerDTO{" +
                "cID='" + cID + '\'' +
                ", name='" + name + '\'' +
                ", address='" + address + '\'' +

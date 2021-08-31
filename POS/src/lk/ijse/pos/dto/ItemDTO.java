@@ -1,24 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package lk.ijse.pos.model;
-
-import javafx.collections.ObservableList;
+package lk.ijse.pos.dto;
 
 import java.math.BigDecimal;
 
-public class Item {
+public class ItemDTO {
     private String code;
     private String description;
     private BigDecimal unitPrice;
     private int qtyOnHand;
 
-    public Item ( ) {
+    public ItemDTO ( ) {
     }
 
-    public Item ( String code , String description , BigDecimal unitPrice , int qtyOnHand ) {
+    public ItemDTO ( String code , String description , BigDecimal unitPrice , int qtyOnHand ) {
         this.code = code;
         this.description = description;
         this.unitPrice = unitPrice;
@@ -59,7 +52,7 @@ public class Item {
 
     @Override
     public String toString ( ) {
-        return "Item{" +
+        return "ItemDTO{" +
                "code='" + code + '\'' +
                ", description='" + description + '\'' +
                ", unitPrice=" + unitPrice +

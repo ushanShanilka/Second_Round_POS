@@ -3,23 +3,18 @@ package lk.ijse.pos.bo.custom.impl;
 import lk.ijse.pos.bo.custom.PlaceOrderBO;
 import lk.ijse.pos.controller.OrderFormController;
 import lk.ijse.pos.dao.DAOFactory;
-import lk.ijse.pos.dao.SuperDAO;
-import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.custom.OrderDAO;
 import lk.ijse.pos.dao.custom.OrderDetailsDAO;
-import lk.ijse.pos.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.pos.dao.custom.impl.ItemDAOImpl;
-import lk.ijse.pos.dao.custom.impl.OrderDAOImpl;
-import lk.ijse.pos.dao.custom.impl.OrderDetailsDAOImpl;
 import lk.ijse.pos.db.DBConnection;
-import lk.ijse.pos.model.Item;
-import lk.ijse.pos.model.OrderDetails;
-import lk.ijse.pos.model.Orders;
+import lk.ijse.pos.dto.OrderDetailsDTO;
+import lk.ijse.pos.dto.OrdersDTO;
+import lk.ijse.pos.entity.Item;
+import lk.ijse.pos.entity.OrderDetails;
+import lk.ijse.pos.entity.Orders;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,21 +27,21 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     OrderDetailsDAO orderDetailsDAO = (OrderDetailsDAO) DAOFactory.getInstance ( ).getDAO ( DAOFactory.DAOTypes.ORDERDETAILS );
 
     @Override
-    public boolean purchaseOrder( Orders orders, ArrayList< OrderDetails > orderDetails ) throws Exception {
+    public boolean purchaseOrder( OrdersDTO orders ) throws Exception {
 
         Connection connection = null;
         try {
             connection= DBConnection.getInstance ( ).getConnection ( );
 
         connection.setAutoCommit(false);
-        boolean b1 = orderDAO.add ( orders );
+        boolean b1 = orderDAO.add ( new Orders ( orders.getId (),orders.getDate (),orders.getCustomerId () ));
         if (!b1) {
             connection.rollback();
             return false;
         }
 
-            for ( OrderDetails orderDetail : orderDetails) {
-                boolean add = orderDetailsDAO.add ( orderDetail );
+            for ( OrderDetailsDTO orderDetail : orders.getOrderDetails ()) {
+                boolean add = orderDetailsDAO.add ( new OrderDetails ( orderDetail.getOrderId (),orderDetail.getItemCode (),orderDetail.getQty (),orderDetail.getUnitPrice () ) );
                 if ( !add ) {
                     connection.rollback ( );
                     return false;

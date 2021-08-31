@@ -17,12 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
 import lk.ijse.pos.bo.custom.BOFactory;
-import lk.ijse.pos.bo.custom.SuperBO;
-import lk.ijse.pos.bo.custom.impl.CustomerBOImpl;
 import lk.ijse.pos.bo.custom.CustomerBO;
-import lk.ijse.pos.dao.DAOFactory;
-import lk.ijse.pos.dao.SuperDAO;
-import lk.ijse.pos.model.Customer;
+import lk.ijse.pos.dto.CustomerDTO;
+import lk.ijse.pos.entity.Customer;
 import lk.ijse.pos.view.tblmodel.CustomerTM;
 
 
@@ -51,13 +48,11 @@ public class ManageCustomerFormController implements Initializable {
     CustomerBO customerBO = (CustomerBO) BOFactory.getInstance ( ).getBO ( BOFactory.BOType.CUSTOMER );
 
     private void loadAllCustomers() {
-
-
         try {
-            ArrayList<Customer> allCustomer = customerBO.getAllCustomer ( );
+            ArrayList<CustomerDTO> allCustomer = customerBO.getAllCustomer ( );
             ArrayList<CustomerTM> all = new ArrayList<> (  );
 
-            for (Customer cus:allCustomer){
+            for (CustomerDTO cus:allCustomer){
                 all.add ( new CustomerTM ( cus.getcID (),cus.getName (),cus.getAddress () ) );
             }
             ObservableList<CustomerTM> olCustomers = FXCollections.observableArrayList(all);
@@ -89,13 +84,11 @@ public class ManageCustomerFormController implements Initializable {
                     addnew = true;
                     return;
                 }
-
                 txtCustomerId.setText(newValue.getId());
                 txtCustomerName.setText(newValue.getName());
                 txtCustomerAddress.setText(newValue.getAddress());
 
                 addnew = false;
-
             }
         });
 
@@ -109,10 +102,7 @@ public class ManageCustomerFormController implements Initializable {
 
     @FXML
     private void btnDelete_OnAction(ActionEvent event) {
-
-
         Alert confirmAlert = new Alert(Alert.AlertType.WARNING, "Are you sure whether you want to delete the customer?", ButtonType.YES, ButtonType.NO);
-
         Optional<ButtonType> result = confirmAlert.showAndWait();
 
         if (result.get() == ButtonType.YES) {
@@ -144,13 +134,11 @@ public class ManageCustomerFormController implements Initializable {
 
         addnew = true;
     }
-
     @FXML
     private void btnSave_OnAction(ActionEvent event) {
-
         if (addnew) {
             try {
-                boolean b = customerBO.addCustomer ( new Customer ( txtCustomerId.getText ( ) , txtCustomerName.getText ( ) , txtCustomerAddress.getText ( ) ) );
+                boolean b = customerBO.addCustomer ( new CustomerDTO ( txtCustomerId.getText ( ) , txtCustomerName.getText ( ) , txtCustomerAddress.getText ( ) ) );
                 if (b) {
                     loadAllCustomers();
                 } else {
@@ -162,7 +150,7 @@ public class ManageCustomerFormController implements Initializable {
         } else {
             try {
                 //Update
-                boolean b = customerBO.updateCustomer ( new Customer ( txtCustomerId.getText ( ) , txtCustomerName.getText ( ) , txtCustomerAddress.getText ( ) ) );
+                boolean b = customerBO.updateCustomer ( new CustomerDTO ( txtCustomerId.getText ( ) , txtCustomerName.getText ( ) , txtCustomerAddress.getText ( ) ) );
                 if (b) {
                     loadAllCustomers();
                 } else {
@@ -175,7 +163,7 @@ public class ManageCustomerFormController implements Initializable {
     }
 
     public void searchCustomer ( ActionEvent actionEvent ) throws Exception {
-        Customer customer = customerBO.searchCustomer ( txtCustomerId.getText ( ) );
+        CustomerDTO customer = customerBO.searchCustomer ( txtCustomerId.getText ( ) );
         if ( customer.getcID ()!=null ){
             txtCustomerAddress.setText ( customer.getAddress () );
             txtCustomerName.setText ( customer.getName () );

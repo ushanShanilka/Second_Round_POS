@@ -21,14 +21,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lk.ijse.pos.bo.custom.*;
-import lk.ijse.pos.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.pos.bo.custom.impl.ItemBOImpl;
-import lk.ijse.pos.bo.custom.impl.PlaceOrderBOImpl;
 
-import lk.ijse.pos.model.Customer;
-import lk.ijse.pos.model.Item;
-import lk.ijse.pos.model.OrderDetails;
-import lk.ijse.pos.model.Orders;
+import lk.ijse.pos.dto.CustomerDTO;
+import lk.ijse.pos.dto.ItemDTO;
+import lk.ijse.pos.dto.OrderDetailsDTO;
+import lk.ijse.pos.dto.OrdersDTO;
+import lk.ijse.pos.entity.Customer;
+import lk.ijse.pos.entity.Item;
+import lk.ijse.pos.entity.OrderDetails;
+import lk.ijse.pos.entity.Orders;
 import lk.ijse.pos.view.tblmodel.OrderDetailTM;
 
 
@@ -130,7 +131,7 @@ public class OrderFormController implements Initializable {
 //                    pstm.setObject(1, customerID);
 //                    ResultSet rst = pstm.executeQuery();
 
-                    Customer customer = customerBO.searchCustomer ( customerID );
+                    CustomerDTO customer = customerBO.searchCustomer ( customerID );
 
                     if (customer!=null) {
                         txtCustomerName.setText(customer.getName ());
@@ -165,7 +166,7 @@ public class OrderFormController implements Initializable {
 //
 //                    ResultSet rst = pstm.executeQuery();
 
-                    Item item = itemBO.searchItem ( itemCode );
+                    ItemDTO item = itemBO.searchItem ( itemCode );
 
                     if (item!=null) {
                         String description = item.getDescription ();
@@ -238,14 +239,14 @@ public class OrderFormController implements Initializable {
 
     private void loadAllData() throws Exception {
 
-        ArrayList<Customer> allCustomer = customerBO.getAllCustomer ( );
+        ArrayList<CustomerDTO> allCustomer = customerBO.getAllCustomer ( );
 
-        for (Customer customer:allCustomer) {
+        for (CustomerDTO customer:allCustomer) {
             cmbCustomerID.getItems ().add ( customer.getcID () );
         }
 
-        ArrayList<Item> all = itemBO.getAllItem ( );
-        for (Item item:all) {
+        ArrayList<ItemDTO> all = itemBO.getAllItem ( );
+        for (ItemDTO item:all) {
             cmbItemCode.getItems ().add ( item.getCode () );
         }
 
@@ -313,13 +314,16 @@ public class OrderFormController implements Initializable {
     @FXML
     private void btnPlaceOrderOnAction(ActionEvent event) {
           try{
-              Orders orders = new Orders ( txtOrderID.getText ( ) , parseDate ( txtOrderDate.getEditor ( ).getText ( ) ) , cmbCustomerID.getSelectionModel ( ).getSelectedItem ( ) );
-              ArrayList< OrderDetails > orderDetails = new ArrayList<> ( );
+              OrdersDTO orders = new OrdersDTO ( txtOrderID.getText ( ) , parseDate ( txtOrderDate.getEditor ( ).getText ( ) ) , cmbCustomerID.getSelectionModel ( ).getSelectedItem ( ) );
+              ArrayList< OrderDetailsDTO > orderDetails = new ArrayList<> ( );
 
               for ( OrderDetailTM detailTM:olOrderDetails) {
-                  orderDetails.add ( new OrderDetails (txtOrderID.getText(), detailTM.getItemCode(), detailTM.getQty(), new BigDecimal(detailTM.getUnitPrice())));
+                  orderDetails.add ( new OrderDetailsDTO ( txtOrderID.getText ( ) , detailTM.getItemCode ( ) , detailTM.getQty ( ) , new BigDecimal ( detailTM.getUnitPrice ( ) ) ) );
               }
-              if ( placeOrderBO.purchaseOrder ( orders,orderDetails ) ){
+
+              orders.setOrderDetails(orderDetails);
+
+              if ( placeOrderBO.purchaseOrder ( orders ) ){
                   Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order Placed", ButtonType.OK);
                   alert.show();
               }
