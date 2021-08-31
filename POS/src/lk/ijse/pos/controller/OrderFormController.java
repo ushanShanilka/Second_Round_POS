@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import lk.ijse.pos.bo.CustomerBOImpl;
 import lk.ijse.pos.bo.ItemBOImpl;
+import lk.ijse.pos.bo.PlaceOrderBOImpl;
 import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.custom.OrderDAO;
@@ -86,17 +87,18 @@ public class OrderFormController implements Initializable {
     @FXML
     private JFXDatePicker txtOrderDate;
 
-    private Connection connection;
+    PlaceOrderBOImpl placeOrderBO = new PlaceOrderBOImpl ( );
 
     CustomerBOImpl customerBO = new CustomerBOImpl ();
 
     ItemBOImpl itemBO = new ItemBOImpl ();
 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         try {
-             connection = DBConnection.getInstance().getConnection();
+
 
             // Create a day cell factory
             Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
@@ -319,66 +321,20 @@ public class OrderFormController implements Initializable {
 
     @FXML
     private void btnPlaceOrderOnAction(ActionEvent event) {
-        try {
-            connection.setAutoCommit(false);
+          try{
+              Orders orders = new Orders ( txtOrderID.getText ( ) , parseDate ( txtOrderDate.getEditor ( ).getText ( ) ) , cmbCustomerID.getSelectionModel ( ).getSelectedItem ( ) );
+              ArrayList< OrderDetails > orderDetails = new ArrayList<> ( );
 
-            Orders orders = new Orders ( txtOrderID.getText(),parseDate(txtOrderDate.getEditor().getText()),cmbCustomerID.getSelectionModel().getSelectedItem());
-            boolean b1 = orderDAO.add ( orders );
-            System.out.println (b1 );
+              for ( OrderDetailTM detailTM:olOrderDetails) {
+                  orderDetails.add ( new OrderDetails (txtOrderID.getText(), detailTM.getItemCode(), detailTM.getQty(), new BigDecimal(detailTM.getUnitPrice())));
+              }
+              if ( placeOrderBO.purchaseOrder ( orders,orderDetails ) ){
+                  Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order Placed", ButtonType.OK);
+                  alert.show();
+              }
+          }catch ( Exception e ){
 
-            if (!b1) {
-                connection.rollback();
-                return;
-            }
-
-            for (OrderDetailTM orderDetail: olOrderDetails) {
-                OrderDetails orderDetails = new OrderDetails ( txtOrderID.getText ( ) , orderDetail.getItemCode () ,orderDetail.getQty (),new BigDecimal ( orderDetail.getUnitPrice () ) );
-                boolean b = orderDetailsDAO.add ( orderDetails );
-
-
-                if (!b) {
-                    connection.rollback();
-                    return;
-                }
-                int qtyOnHand = 0;
-
-                Item item = itemBO.searchItem ( orderDetails.getItemCode ( ) );
-
-
-                if (item!=null) {
-                    qtyOnHand = item.getQtyOnHand ();
-                }
-
-                boolean b2 = itemBO.updateItemQtyOnHand ( orderDetails.getItemCode ( ) , orderDetails.getQty ( ) );
-                System.out.println (b2 );
-
-                if (!b2) {
-                    connection.rollback();
-                    return;
-                }
-
-            }
-
-            connection.commit();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order Placed", ButtonType.OK);
-            alert.show();
-
-        } catch (SQLException ex) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex1) {
-                Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception e) {
-            e.printStackTrace ( );
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(OrderFormController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+          }
     }
 
     private Date parseDate ( String text ) {
