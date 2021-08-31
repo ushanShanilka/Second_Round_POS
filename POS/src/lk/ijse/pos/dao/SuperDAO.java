@@ -6,7 +6,7 @@ public interface SuperDAO<T,ID> {
 
     boolean add ( T t ) throws Exception;
 
-    boolean update ( T t ) throws Exception;
+     boolean update ( T t ) throws Exception;
 
     boolean delete ( ID id ) throws Exception;
 

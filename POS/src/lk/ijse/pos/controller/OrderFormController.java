@@ -20,6 +20,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import lk.ijse.pos.bo.CustomerBOImpl;
+import lk.ijse.pos.bo.ItemBOImpl;
 import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.custom.OrderDAO;
@@ -86,15 +88,9 @@ public class OrderFormController implements Initializable {
 
     private Connection connection;
 
-    /*Property  Injection*/
-    private CustomerDAO customerDAO = new CustomerDAOImpl ( );
+    CustomerBOImpl customerBO = new CustomerBOImpl ();
 
-    private ItemDAO itemDAO = new ItemDAOImpl ( );
-
-    private OrderDAO orderDAO = new OrderDAOImpl ( );
-
-    private OrderDetailsDAO orderDetailsDAO =  new OrderDetailsDAOImpl ( );
-
+    ItemBOImpl itemBO = new ItemBOImpl ();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -141,7 +137,7 @@ public class OrderFormController implements Initializable {
 //                    pstm.setObject(1, customerID);
 //                    ResultSet rst = pstm.executeQuery();
 
-                    Customer customer = customerDAO.search ( customerID );
+                    Customer customer = customerBO.searchCustomer ( customerID );
 
                     if (customer!=null) {
                         txtCustomerName.setText(customer.getName ());
@@ -176,7 +172,7 @@ public class OrderFormController implements Initializable {
 //
 //                    ResultSet rst = pstm.executeQuery();
 
-                    Item item = itemDAO.search ( itemCode );
+                    Item item = itemBO.searchItem ( itemCode );
 
                     if (item!=null) {
                         String description = item.getDescription ();
@@ -249,13 +245,13 @@ public class OrderFormController implements Initializable {
 
     private void loadAllData() throws Exception {
 
-        ArrayList<Customer> allCustomer = customerDAO.getAll ( );
+        ArrayList<Customer> allCustomer = customerBO.getAllCustomer ( );
 
         for (Customer customer:allCustomer) {
             cmbCustomerID.getItems ().add ( customer.getcID () );
         }
 
-        ArrayList<Item> all = itemDAO.getAll ( );
+        ArrayList<Item> all = itemBO.getAllItem ( );
         for (Item item:all) {
             cmbItemCode.getItems ().add ( item.getCode () );
         }
@@ -346,14 +342,14 @@ public class OrderFormController implements Initializable {
                 }
                 int qtyOnHand = 0;
 
-                Item item = itemDAO.search ( orderDetails.getItemCode ( ) );
+                Item item = itemBO.searchItem ( orderDetails.getItemCode ( ) );
 
 
                 if (item!=null) {
                     qtyOnHand = item.getQtyOnHand ();
                 }
 
-                boolean b2 = itemDAO.updateItemQtyOnHand ( orderDetails.getItemCode ( ) , orderDetails.getQty ( ) );
+                boolean b2 = itemBO.updateItemQtyOnHand ( orderDetails.getItemCode ( ) , orderDetails.getQty ( ) );
                 System.out.println (b2 );
 
                 if (!b2) {

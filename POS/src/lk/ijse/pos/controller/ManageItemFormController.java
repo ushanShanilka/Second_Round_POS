@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.pos.AppInitializer;
+import lk.ijse.pos.bo.ItemBOImpl;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.custom.impl.ItemDAOImpl;
 import lk.ijse.pos.model.Item;
@@ -47,13 +48,12 @@ public class ManageItemFormController implements Initializable{
 
     private boolean addNew = true;
 
-    /*Property  Injection*/
-    private ItemDAO itemDAO = new ItemDAOImpl ( );
+    ItemBOImpl itemBO = new ItemBOImpl ();
 
     private void loadAllItems(){
 
         try {
-            ArrayList<Item> all = itemDAO.getAll ( );
+            ArrayList<Item> all = itemBO.getAllItem ( );
             ArrayList<ItemTM> items = new ArrayList<> ( );
 
             for (Item i:all){
@@ -130,7 +130,7 @@ public class ManageItemFormController implements Initializable{
         if (addNew){
 
             try {
-                boolean b = itemDAO.add ( new Item ( txtItemCode.getText ( ) , txtDescription.getText ( ) , new BigDecimal ( txtUnitPrice.getText ( ) ) , Integer.parseInt ( txtQty.getText ( ) )));
+                boolean b = itemBO.addItem ( new Item ( txtItemCode.getText ( ) , txtDescription.getText ( ) , new BigDecimal ( txtUnitPrice.getText ( ) ) , Integer.parseInt ( txtQty.getText ( ) )));
 
                 if (b){
                     loadAllItems();
@@ -145,7 +145,7 @@ public class ManageItemFormController implements Initializable{
         }else{
 
             try {
-                boolean b = itemDAO.update ( new Item ( txtItemCode.getText ( ) , txtDescription.getText ( ) , new BigDecimal ( txtUnitPrice.getText ( ) ) , Integer.parseInt ( txtQty.getText ( ) ) ) );
+                boolean b = itemBO.updateItem ( new Item ( txtItemCode.getText ( ) , txtDescription.getText ( ) , new BigDecimal ( txtUnitPrice.getText ( ) ) , Integer.parseInt ( txtQty.getText ( ) ) ) );
 
 
                 if (b){
@@ -171,7 +171,7 @@ public class ManageItemFormController implements Initializable{
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
 
         try {
-            boolean b = itemDAO.delete ( txtItemCode.getText ( ) );
+            boolean b = itemBO.deleteItem ( txtItemCode.getText ( ) );
 
             if (b){
                 loadAllItems();
