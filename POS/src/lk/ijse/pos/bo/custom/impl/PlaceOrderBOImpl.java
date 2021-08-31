@@ -1,6 +1,6 @@
-package lk.ijse.pos.bo;
+package lk.ijse.pos.bo.custom.impl;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
+import lk.ijse.pos.bo.custom.PlaceOrderBO;
 import lk.ijse.pos.controller.OrderFormController;
 import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
@@ -15,15 +15,13 @@ import lk.ijse.pos.model.Item;
 import lk.ijse.pos.model.OrderDetails;
 import lk.ijse.pos.model.Orders;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PlaceOrderBOImpl {
-
+public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     /*Property  Injection*/
     private CustomerDAO customerDAO = new CustomerDAOImpl ( );
@@ -34,7 +32,7 @@ public class PlaceOrderBOImpl {
 
     private OrderDetailsDAO orderDetailsDAO =  new OrderDetailsDAOImpl ( );
 
-
+    @Override
     public boolean purchaseOrder( Orders orders, ArrayList< OrderDetails > orderDetails ) throws Exception {
         Connection connection = null;
         try {
