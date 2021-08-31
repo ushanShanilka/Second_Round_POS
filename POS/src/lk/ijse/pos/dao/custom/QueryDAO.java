@@ -1,4 +1,6 @@
 package lk.ijse.pos.dao.custom;
 
-public interface QueryDAO {
+import lk.ijse.pos.dao.SuperDAO;
+
+public interface QueryDAO extends SuperDAO {
 }
