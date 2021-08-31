@@ -2,6 +2,8 @@ package lk.ijse.pos.bo.custom.impl;
 
 import lk.ijse.pos.bo.custom.PlaceOrderBO;
 import lk.ijse.pos.controller.OrderFormController;
+import lk.ijse.pos.dao.DAOFactory;
+import lk.ijse.pos.dao.SuperDAO;
 import lk.ijse.pos.dao.custom.CustomerDAO;
 import lk.ijse.pos.dao.custom.ItemDAO;
 import lk.ijse.pos.dao.custom.OrderDAO;
@@ -24,16 +26,14 @@ import java.util.logging.Logger;
 public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     /*Property  Injection*/
-    private CustomerDAO customerDAO = new CustomerDAOImpl ( );
 
-    private ItemDAO itemDAO = new ItemDAOImpl ( );
-
-    private OrderDAO orderDAO = new OrderDAOImpl ( );
-
-    private OrderDetailsDAO orderDetailsDAO =  new OrderDetailsDAOImpl ( );
+    ItemDAO itemDAO = (ItemDAO) DAOFactory.getInstance ( ).getDAO ( DAOFactory.DAOTypes.ITEM );
+    OrderDAO orderDAO = (OrderDAO) DAOFactory.getInstance ( ).getDAO ( DAOFactory.DAOTypes.ORDER );
+    OrderDetailsDAO orderDetailsDAO = (OrderDetailsDAO) DAOFactory.getInstance ( ).getDAO ( DAOFactory.DAOTypes.ORDERDETAILS );
 
     @Override
     public boolean purchaseOrder( Orders orders, ArrayList< OrderDetails > orderDetails ) throws Exception {
+
         Connection connection = null;
         try {
             connection= DBConnection.getInstance ( ).getConnection ( );
